@@ -67,7 +67,7 @@ func NewRegistrar(client Client, service Service, logger log.Logger) *Registrar 
 // Register implements the sd.Registrar interface. Call it when you want your
 // service to be registered in etcd, typically at startup.
 func (r *Registrar) Register() {
-	if err := r.client.Register(r.service); err != nil {
+	if err := r.client.Register(r.service, nil); err != nil {
 		r.logger.Log("err", err)
 		return
 	}

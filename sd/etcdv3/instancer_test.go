@@ -76,7 +76,7 @@ func (c *fakeClient) LeaseID() int64 {
 	return 0
 }
 
-func (c *fakeClient) Register(Service) error {
+func (c *fakeClient) Register(Service, chan<- struct{}) error {
 	return nil
 }
 func (c *fakeClient) Deregister(Service) error {

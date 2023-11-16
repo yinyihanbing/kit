@@ -36,7 +36,7 @@ type Client interface {
 	WatchPrefix(prefix string, ch chan struct{})
 
 	// Register a service with etcd.
-	Register(s Service) error
+	Register(s Service, exited chan<- struct{}) error
 
 	// Deregister a service with etcd.
 	Deregister(s Service) error
@@ -162,7 +162,7 @@ func (c *client) WatchPrefix(prefix string, ch chan struct{}) {
 	}
 }
 
-func (c *client) Register(s Service) error {
+func (c *client) Register(s Service, exited chan<- struct{}) error {
 	var err error
 
 	if s.Key == "" {
@@ -216,6 +216,11 @@ func (c *client) Register(s Service) error {
 	// fix bug #799
 	go func() {
 		for {
+			defer func() {
+				if exited != nil {
+					exited <- struct{}{}
+				}
+			}()
 			select {
 			case r := <-c.hbch:
 				// avoid dead loop when channel was closed

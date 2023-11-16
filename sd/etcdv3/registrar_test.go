@@ -20,7 +20,7 @@ func (tc *testClient) GetEntries(prefix string) ([]string, error) {
 func (tc *testClient) WatchPrefix(prefix string, ch chan struct{}) {
 }
 
-func (tc *testClient) Register(s Service) error {
+func (tc *testClient) Register(s Service, exited chan<- struct{}) error {
 	return tc.registerRes
 }
 
